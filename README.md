@@ -1,5 +1,8 @@
 # LPHYS2267-Impact of changes in insolation and CO2 on Climate
 
+![ts_CO2_1](https://user-images.githubusercontent.com/58213378/236671927-fc2aac32-ba28-4484-86eb-1b27de659232.png)
+
+
 ### Why this repository ? 
 GitHub made for the Project : **Investigate the impacts of changes in insolation and CO2 on climate based on
 model simulations** of the LPHYS2267 - Paleoclimate dynamics and modelling class. 
