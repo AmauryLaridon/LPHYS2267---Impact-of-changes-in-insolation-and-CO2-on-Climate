@@ -29,11 +29,13 @@ dir_loc_2 = "~/Bureau/LPHYS2267 - Paleoclimate Dynamics and Modelling/Projet/Dat
 ;################# CONTROL RUN ##################
 ;### begin read the data of Control experiment 1 "Prec_PI" used for Exercice 1 and 2 ###
 file1 = "atmmmwp002400.PrI.nc"                              ;the file name for input data
+; atmmmwp002400.PrI.nc is the monthly climatology for a hundred years and has 12 timesteps (the first entry is the January mean value for 100 years)
 infile1 = addfile(dir_loc_CTL+file1, "r")                  ;read input data
 ts_CTL   = infile1->ts                                      ;extract the variable
 printVarSummary(ts_CTL)                                     ;print the information of variable
 
 file2 = "CLIO3m.PrI002400.nc"                               ;the file name for input data
+; CLIO3m.PrI002400.nc monthly data output for the ocean of a hundred years
 infile2 = addfile(dir_loc_CTL+file2, "r")                  ;read input data
 sst_CTL   = infile2->sst                                    ;extract the variable
 printVarSummary(sst_CTL)                                    ;print the information of variable
@@ -66,20 +68,20 @@ printVarSummary(sst_CO2)
 
 ;######################################################## Data Analysis #########################################################
 
-ts_CLM = clmMonTLL(ts_CTL)                           ;calculate the climatology of the entire period for surface temperature
+ts_CLM = clmMonTLL(ts_CTL)                           ;calculate the climatology of the entire period for surface temperature. Calculates long term monthly means (monthly climatology) from monthly data (lat,lon,time version) 
 ;ts_CLM = clmMonTLL(ts_CTL(0*12:100*12-1,:,:))       ;here calculate the climatology with the last 30 years(71-100yr)
 sst_CLM = clmMonTLL(sst_CTL)                         ;calculate the climatology of the entire period for surface temperature
-ts_anm_PREC = calcMonAnomTLL(ts_PREC, ts_CLM)        ;calculate the monthly anomaly with respect to the climatology
+ts_anm_PREC = calcMonAnomTLL(ts_PREC, ts_CLM)        ;calculate the monthly anomaly with respect to the climatology. Calculates monthly anomalies by subtracting the long term mean from each point (time,lat,lon version) 
 ts_anm_CO2 = calcMonAnomTLL(ts_CO2, ts_CLM)          ;calculate the monthly anomaly with respect to the climatology
 sst_anm_PREC = calcMonAnomTLL(sst_PREC, sst_CLM)     ;calculate the monthly anomaly with respect to the climatology
 sst_anm_CO2 = calcMonAnomTLL(sst_CO2, sst_CLM)       ;calculate the monthly anomaly with respect to the climatology
 
-ts_ann_anm_PREC = month_to_annual(ts_anm_PREC, 1)      ;calculate the annual mean with the monthly anomalous data
+ts_ann_anm_PREC = month_to_annual(ts_anm_PREC, 1)      ;calculate the annual mean with the monthly anomalous data. Converts monthly values to annual values. 
 ts_ann_anm_CO2 = month_to_annual(ts_anm_CO2, 1)        ;calculate the annual mean with the monthly anomalous data
 sst_ann_anm_PREC = month_to_annual(sst_anm_PREC, 1)    ;calculate the annual mean with the monthly anomalous data
 sst_ann_anm_CO2 = month_to_annual(sst_anm_CO2, 1)      ;calculate the annual mean with the monthly anomalous data
 
-ts_jja_anm_PREC = month_to_season(ts_anm_PREC, "JJA")    ;calculate the summer mean with the monthly anomalous data
+ts_jja_anm_PREC = month_to_season(ts_anm_PREC, "JJA")    ;calculate the summer mean with the monthly anomalous data. Computes a user-specified three-month seasonal mean (DJF, JFM, FMA, MAM, AMJ, MJJ, JJA, JAS, ASO, SON, OND, NDJ). 
 ts_djf_anm_PREC = month_to_season(ts_anm_PREC, "DJF")    ;calculate the winter mean with the monthly anomalous data
 ts_jja_anm_CO2 = month_to_season(ts_anm_CO2, "JJA")      ;calculate the summer mean with the monthly anomalous data
 ts_djf_anm_CO2 = month_to_season(ts_anm_CO2, "DJF")      ;calculate the winter mean with the monthly anomalous data
@@ -88,7 +90,7 @@ sst_djf_anm_PREC = month_to_season(sst_anm_PREC, "DJF")  ;calculate the winter m
 sst_jja_anm_CO2 = month_to_season(sst_anm_CO2, "JJA")    ;calculate the summer mean with the monthly anomalous data
 sst_djf_anm_CO2 = month_to_season(sst_anm_CO2, "DJF")    ;calculate the winter mean with the monthly anomalous data
 
-ts_out_ann_PREC = dim_avg_n_Wrap(ts_ann_anm_PREC, 0)      ;calculate multi-year mean for plots
+ts_out_ann_PREC = dim_avg_n_Wrap(ts_ann_anm_PREC, 0)      ;calculate multi-year mean for plots.  Computes the average of a variable's given dimensions at all other dimensions and retains metadata. 
 ts_out_ann_CO2 = dim_avg_n_Wrap(ts_ann_anm_CO2, 0)        ;calculate multi-year mean for plots
 sst_out_ann_PREC = dim_avg_n_Wrap(sst_ann_anm_PREC, 0)    ;calculate multi-year mean for plots
 sst_out_ann_CO2 = dim_avg_n_Wrap(sst_ann_anm_CO2, 0)      ;calculate multi-year mean for plots
@@ -126,8 +128,8 @@ res@cnFillOn           = True
 res@cnLinesOn          = False
 res@cnLineLabelsOn     = False
 res@cnLevelSelectionMode = "ManualLevels"  ;manually set contour line
-res@cnMaxLevelValF     = 12.               ;min value for contour line
-res@cnMinLevelValF     = 0.              ;max value for contour line
+res@cnMaxLevelValF     = 12.               ;max value for contour line
+res@cnMinLevelValF     = 0.              ;min value for contour line
 res@cnLevelSpacingF    = 0.5               ;stride, the difference between the adjacent contour lines
 res@lbBoxEndCapStyle   = "TriangleBothEnds"
 res@lbLabelBarOn       = False             ;don't add color bars for single figure
