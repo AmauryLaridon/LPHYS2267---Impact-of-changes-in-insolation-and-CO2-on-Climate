@@ -32,13 +32,13 @@ file1 = "atmmmwp002400.PrI.nc"                              ;the file name for i
 ; atmmmwp002400.PrI.nc is the monthly climatology for a hundred years and has 12 timesteps (the first entry is the January mean value for 100 years)
 infile1 = addfile(dir_loc_CTL+file1, "r")                  ;read input data
 ts_CTL   = infile1->ts                                      ;extract the variable
-printVarSummary(ts_CTL)                                     ;print the information of variable
+;printVarSummary(ts_CTL)                                     ;print the information of variable
 
 file2 = "CLIO3m.PrI002400.nc"                               ;the file name for input data
 ; CLIO3m.PrI002400.nc monthly data output for the ocean of a hundred years
 infile2 = addfile(dir_loc_CTL+file2, "r")                  ;read input data
 sst_CTL   = infile2->sst                                    ;extract the variable
-printVarSummary(sst_CTL)                                    ;print the information of variable
+;printVarSummary(sst_CTL)                                    ;print the information of variable
 ;### end read the data of Control experiment ###
 
 ;################# SENSITIVITY RUN ##################
@@ -47,23 +47,23 @@ printVarSummary(sst_CTL)                                    ;print the informati
 file3 = "atmmmwp002400.Stud1_prec.nc"
 infile3 = addfile(dir_loc_1+file3, "r")
 ts_PREC   = infile3->ts
-printVarSummary(ts_PREC)
+;printVarSummary(ts_PREC)
 
 file4 = "CLIO3m.Stud1_prec002400.nc"
 infile4 = addfile(dir_loc_1+file4, "r")
 sst_PREC   = infile4->sst
-printVarSummary(sst_PREC)
+;printVarSummary(sst_PREC)
 
 ;### begin read the data of Sensitivity experiment 2 with Doubling CO_2 for Exercice 2 ###
 file5 = "atmmmwp002400.PrI_doub.nc"
 infile5 = addfile(dir_loc_2+file5, "r")
 ts_CO2   = infile5->ts
-printVarSummary(ts_CO2  )
+;printVarSummary(ts_CO2  )
 
 file6 = "CLIO3m.PrI_doub002400.nc"
 infile6 = addfile(dir_loc_2+file6, "r")
 sst_CO2   = infile6->sst
-printVarSummary(sst_CO2)
+;printVarSummary(sst_CO2)
 ;###end read the data of sensitivity experiment ###
 
 ;######################################################## Data Analysis #########################################################
@@ -105,6 +105,38 @@ ts_out_djf_CO2 = dim_avg_n_Wrap(ts_djf_anm_CO2, 0)
 sst_out_djf_PREC = dim_avg_n_Wrap(sst_djf_anm_PREC, 0)
 sst_out_djf_CO2 = dim_avg_n_Wrap(sst_djf_anm_CO2, 0)
 
+; ### Computation of the global average mean temperature anomaly ###
+
+lat = ts_CLM&lat
+rad    = 4.0*atan(1.0)/180.0
+clat   = cos(lat*rad)                                 ;use the cosine of the latitudes to be the weighting
+clat!0 = "lat"
+clat&lat = lat                                        ;set coordinate for the variable
+
+; # Annual # 
+glob_mean_TS_ann_PREC = wgt_areaave_Wrap(ts_out_ann_PREC(:,:), clat({:}), 1.0, 1)  ;compute the weighted area mean for Arctic
+glob_mean_TS_ann_CO2 = wgt_areaave_Wrap(ts_out_ann_CO2(:,:), clat({:}), 1.0, 1)  ;compute the weighted area mean for Arctic
+
+; # JJA # 
+
+glob_mean_TS_JJA_PREC = wgt_areaave_Wrap(ts_out_jja_PREC(:,:), clat({:}), 1.0, 1)  ;compute the weighted area mean for Arctic
+glob_mean_TS_JJA_CO2 = wgt_areaave_Wrap(ts_out_jja_CO2(:,:), clat({:}), 1.0, 1)  ;compute the weighted area mean for Arctic
+
+; # DJF # 
+
+glob_mean_TS_DJF_PREC = wgt_areaave_Wrap(ts_out_djf_PREC(:,:), clat({:}), 1.0, 1)  ;compute the weighted area mean for Arctic
+glob_mean_TS_DJF_CO2 = wgt_areaave_Wrap(ts_out_djf_CO2(:,:), clat({:}), 1.0, 1)  ;compute the weighted area mean for Arctic
+
+print("----------------------------------------------------------")
+print("glob_mean_TS_ann_PREC = " + glob_mean_TS_ann_PREC + "°C")
+print("glob_mean_TS_JJA_PREC = " + glob_mean_TS_JJA_PREC + "°C")
+print("glob_mean_TS_DJF_PREC = " + glob_mean_TS_DJF_PREC + "°C")
+print("----------------------------------------------------------")
+print("glob_mean_TS_ann_CO2 = " + glob_mean_TS_ann_CO2 + "°C")
+print("glob_mean_TS_JJA_CO2 = " + glob_mean_TS_JJA_CO2 + "°C")
+print("glob_mean_TS_DJF_CO2 = " + glob_mean_TS_DJF_CO2 + "°C")
+print("----------------------------------------------------------")
+
 ;######################################################### Data Plot #########################################################
 
 ;############################################# EXERCISE 1 #################################################
@@ -128,8 +160,8 @@ res@cnFillOn           = True
 res@cnLinesOn          = False
 res@cnLineLabelsOn     = False
 res@cnLevelSelectionMode = "ManualLevels"  ;manually set contour line
-res@cnMaxLevelValF     = 12.               ;max value for contour line
-res@cnMinLevelValF     = 0.              ;min value for contour line
+res@cnMaxLevelValF     = 8.               ;max value for contour line
+res@cnMinLevelValF     = -3.              ;min value for contour line
 res@cnLevelSpacingF    = 0.5               ;stride, the difference between the adjacent contour lines
 res@lbBoxEndCapStyle   = "TriangleBothEnds"
 res@lbLabelBarOn       = False             ;don't add color bars for single figure
@@ -181,8 +213,8 @@ res@cnFillOn           = True
 res@cnLinesOn          = False
 res@cnLineLabelsOn     = False
 res@cnLevelSelectionMode = "ManualLevels"  ;manually set contour line
-res@cnMaxLevelValF     = 12.               ;min value for contour line
-res@cnMinLevelValF     = 0.              ;max value for contour line
+res@cnMaxLevelValF     = 8.               ;min value for contour line
+res@cnMinLevelValF     = -3.              ;max value for contour line
 res@cnLevelSpacingF    = 0.5               ;stride, the difference between the adjacent contour lines
 res@lbBoxEndCapStyle   = "TriangleBothEnds"
 res@lbLabelBarOn       = False             ;don't add color bars for single figure
@@ -237,8 +269,8 @@ res@cnFillOn           = True
 res@cnLinesOn          = False
 res@cnLineLabelsOn     = False
 res@cnLevelSelectionMode = "ManualLevels"  ;manually set contour line
-res@cnMaxLevelValF     = 12.               ;min value for contour line
-res@cnMinLevelValF     = 0.              ;max value for contour line
+res@cnMaxLevelValF     = 8.               ;min value for contour line
+res@cnMinLevelValF     = -3.              ;max value for contour line
 res@cnLevelSpacingF    = 0.5               ;stride, the difference between the adjacent contour lines
 res@lbBoxEndCapStyle   = "TriangleBothEnds"
 res@lbLabelBarOn       = False             ;don't add color bars for single figure
@@ -290,8 +322,8 @@ res@cnFillOn           = True
 res@cnLinesOn          = False
 res@cnLineLabelsOn     = False
 res@cnLevelSelectionMode = "ManualLevels"  ;manually set contour line
-res@cnMaxLevelValF     = 12.               ;min value for contour line
-res@cnMinLevelValF     = 0.              ;max value for contour line
+res@cnMaxLevelValF     = 8.               ;min value for contour line
+res@cnMinLevelValF     = -3.              ;max value for contour line
 res@cnLevelSpacingF    = 0.5               ;stride, the difference between the adjacent contour lines
 res@lbBoxEndCapStyle   = "TriangleBothEnds"
 res@lbLabelBarOn       = False             ;don't add color bars for single figure
