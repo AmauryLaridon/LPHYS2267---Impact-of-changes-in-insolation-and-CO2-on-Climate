@@ -1,6 +1,7 @@
 # LPHYS2267-Impact of changes in insolation and CO2 on Climate
 
-![ts_CO2_1](https://user-images.githubusercontent.com/58213378/236671927-fc2aac32-ba28-4484-86eb-1b27de659232.png)
+
+![ts_CO2_1](https://github.com/AmauryLaridon/LPHYS2267---Impact-of-changes-in-insolation-and-CO2-on-Climate/assets/58213378/c415f447-db35-4945-a4d2-6cd3bae5bc40)
 
 
 ### Why this repository ? 
