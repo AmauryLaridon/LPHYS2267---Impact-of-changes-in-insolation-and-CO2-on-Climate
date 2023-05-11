@@ -15,7 +15,7 @@ The goal of this project is to :
 
 More informations can be found in the *Instructions* folder. 
 
-The final report around these questions and the analysis can be found in the https://fr.overleaf.com/read/wbqcnrcmzshr. This project has been done by Élise Françoisse, Augustin Lambotte and Amaury Laridon.
+The final report around these questions and the analysis can be found at the *report.pdf* file. This project has been done by Élise Françoisse, Augustin Lambotte and Amaury Laridon.
 
 ### Organisation of the files 
 
